@@ -1,0 +1,5 @@
+{
+  "name": "VectorShift Pipeline Builder",
+  "description": "A React-based node editor for building and analyzing pipelines with dynamic text nodes and abstraction-based architecture.",
+  "requestFramePermissions": []
+}

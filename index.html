@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VectorShift Pipeline Builder</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+            },
+            colors: {
+              brand: {
+                50: '#eef2ff',
+                100: '#e0e7ff',
+                200: '#c7d2fe',
+                300: '#a5b4fc',
+                400: '#818cf8',
+                500: '#6366f1',
+                600: '#4f46e5',
+                700: '#4338ca',
+                800: '#3730a3',
+                900: '#312e81',
+              }
+            },
+            boxShadow: {
+              'node': '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+              'node-hover': '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+              'node-selected': '0 0 0 2px #6366f1, 0 10px 15px -3px rgba(99, 102, 241, 0.2)',
+            }
+          }
+        }
+      }
+    </script>
+    
+    <!-- React Flow & Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reactflow/dist/style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    
+    <style>
+      /* Global overrides for a cleaner look */
+      body {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      
+      /* React Flow Handle Customization override */
+      .react-flow__handle {
+        transition: transform 0.2s ease;
+      }
+      .react-flow__handle:hover {
+        transform: scale(1.2);
+      }
+    </style>
+
+  <script type="importmap">
+{
+  "imports": {
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "reactflow": "https://aistudiocdn.com/reactflow@^11.11.4"
+  }
+}
+</script>
+</head>
+  <body class="bg-slate-50 text-slate-900 h-screen w-screen overflow-hidden">
+    <div id="root" class="h-full w-full"></div>
+  </body>
+</html>
