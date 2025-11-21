@@ -52,9 +52,9 @@ The server will start at `http://127.0.0.1:8000`.
 npm install
 
 # Start the development server
-npm start
+npm run dev
 ```
-The application will open at `http://localhost:3000`.
+The application will open at `http://localhost:3000` (or the port specified by your terminal).
 
 ---
 
@@ -75,6 +75,3 @@ The application will open at `http://localhost:3000`.
 4. **Run Pipeline**: Click the **"Run Pipeline"** button in the header.
    - If the backend is running, it processes the graph.
    - If the backend is off, the frontend simulates the result (useful for demos).
-
----
-
