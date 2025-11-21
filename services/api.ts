@@ -1,3 +1,4 @@
+
 import { PipelineResponse } from '../types';
 import { Node, Edge } from 'reactflow';
 
@@ -12,9 +13,9 @@ export const parsePipeline = async (nodes: Node[], edges: Edge[]): Promise<Pipel
 
   try {
     // 1. Attempt to contact the real Python backend with a timeout
-    // If backend is not running, fetch can hang. We abort after 2 seconds to fallback quickly.
+    // If backend is not running, fetch can hang. We abort after 1 second to fallback quickly.
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 2000);
+    const timeoutId = setTimeout(() => controller.abort(), 1000);
 
     const response = await fetch(backendUrl, {
       method: 'POST',

@@ -75,3 +75,6 @@ The application will open at `http://localhost:3000`.
 4. **Run Pipeline**: Click the **"Run Pipeline"** button in the header.
    - If the backend is running, it processes the graph.
    - If the backend is off, the frontend simulates the result (useful for demos).
+
+---
+

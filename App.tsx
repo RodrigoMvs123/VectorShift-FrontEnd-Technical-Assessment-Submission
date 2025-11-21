@@ -30,6 +30,14 @@ const initialEdges: Edge[] = [
   { id: 'e2-3', source: '2', target: '3', sourceHandle: 'response', animated: true },
 ];
 
+// --- Types for Notification ---
+interface NotificationState {
+  title: string;
+  message: string;
+  details?: string[];
+  type: 'success' | 'error';
+}
+
 function PipelineBuilder() {
   const nodeTypes = useMemo(() => ({
     customInput: InputNode,
@@ -46,6 +54,9 @@ function PipelineBuilder() {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const [isLoading, setIsLoading] = useState(false);
+  
+  // New state for custom modal notification
+  const [notification, setNotification] = useState<NotificationState | null>(null);
 
   const onConnect = useCallback(
     (params: Connection) => setEdges((eds) => addEdge({ 
@@ -74,23 +85,18 @@ function PipelineBuilder() {
     try {
       const result = await parsePipeline(nodes, edges);
       
-      // Styling the alert message for the demo
-      let message = `
-Pipeline Analysis Successfully Completed!
----------------------------------------
-Nodes: ${result.num_nodes}
-Edges: ${result.num_edges}
-DAG Structure: ${result.is_dag ? '✅ Valid (Acyclic)' : '❌ Invalid (Cyclic Detected)'}
-`;
-
-      // If variables were detected (even in simulation mode), show them
-      if (result.variables && result.variables.length > 0) {
-        message += `\nDetected Variables: ${result.variables.join(', ')}`;
-      }
-
-      alert(message);
+      setNotification({
+        title: 'Pipeline Analysis Completed',
+        message: `Metrics:\n• Nodes: ${result.num_nodes}\n• Edges: ${result.num_edges}\n• Structure: ${result.is_dag ? '✅ Valid (Acyclic)' : '❌ Invalid (Cyclic Detected)'}`,
+        details: result.variables,
+        type: 'success'
+      });
     } catch (error) {
-      alert('Failed to parse pipeline. Ensure backend is running or check console.');
+      setNotification({
+        title: 'Analysis Failed',
+        message: 'Could not connect to the analysis engine or simulation failed.',
+        type: 'error'
+      });
     } finally {
       setIsLoading(false);
     }
@@ -195,6 +201,58 @@ DAG Structure: ${result.is_dag ? '✅ Valid (Acyclic)' : '❌ Invalid (Cyclic De
             className="!bg-white !border !border-slate-200 !rounded-lg !shadow-lg !m-4"
           />
         </ReactFlow>
+
+        {/* Result Notification Modal */}
+        {notification && (
+          <div className="absolute inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-[2px]">
+            <div className="bg-white rounded-xl shadow-2xl max-w-md w-full overflow-hidden animate-in fade-in zoom-in duration-200 border border-slate-200">
+              {/* Modal Header */}
+              <div className={`px-6 py-4 border-b ${notification.type === 'success' ? 'bg-green-50 border-green-100' : 'bg-red-50 border-red-100'}`}>
+                <div className="flex items-center gap-3">
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center ${notification.type === 'success' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}`}>
+                    <i className={`fas ${notification.type === 'success' ? 'fa-check' : 'fa-exclamation-triangle'}`}></i>
+                  </div>
+                  <h3 className={`text-lg font-bold ${notification.type === 'success' ? 'text-green-900' : 'text-red-900'}`}>
+                    {notification.title}
+                  </h3>
+                </div>
+              </div>
+
+              {/* Modal Body */}
+              <div className="p-6 space-y-4">
+                <div className="text-slate-600 text-sm whitespace-pre-wrap leading-relaxed font-medium">
+                  {notification.message}
+                </div>
+                
+                {notification.details && notification.details.length > 0 && (
+                  <div className="bg-slate-50 rounded-lg p-4 border border-slate-100">
+                    <div className="flex items-center gap-2 mb-2">
+                      <i className="fas fa-code text-slate-400 text-xs"></i>
+                      <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Detected Variables</span>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {notification.details.map((v, i) => (
+                        <span key={`${v}-${i}`} className="px-2.5 py-1 bg-white border border-slate-200 text-brand-600 text-xs rounded-md font-mono font-medium shadow-sm">
+                          {v}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Modal Footer */}
+              <div className="px-6 py-4 bg-slate-50 border-t border-slate-100 flex justify-end">
+                <button
+                  onClick={() => setNotification(null)}
+                  className="px-5 py-2.5 bg-white border border-slate-300 text-slate-700 text-sm font-bold rounded-lg hover:bg-slate-100 hover:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-400/20 transition-all shadow-sm"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
